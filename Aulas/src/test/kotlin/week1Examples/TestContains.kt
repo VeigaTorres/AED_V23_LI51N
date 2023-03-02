@@ -19,6 +19,6 @@ class TestContains {
 
     @Test
     fun test_not_exist() {
-        assertFalse(contains(a, a.size + 1))
+        assertFalse(contains(a, a.size+1))
     }
 }
