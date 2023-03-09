@@ -3,12 +3,11 @@ package week2Sorting
 import kotlin.random.Random
 import kotlin.test.*
 
-class TestSort  {
+ class TestSort  {
     val N = 1000
 
     fun sortArray( a: Array<Int>, l: Int, r: Int ) {
-        insertionSort(a, l,  r)
-        a.sort() // Para retirar
+        insertionSort(a, l, r)
     }
 
     fun testSorted( a: Array<Int>) {
