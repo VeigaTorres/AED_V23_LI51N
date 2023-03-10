@@ -109,10 +109,14 @@ fun selectionSort(a:Array<Int>, left: Int=0, right: Int=a.size-1) {
  * @param left - indice onde começa o subarray (inclusivo)
  * @param right - indice onde termina o subarray (inclusivo)
  */
-fun mergeSort(a:Array<Int>, left: Int=0, right: Int = a.size-1 ) {
-  TODO()
-}
+fun mergeSort(a:Array<Int>, left: Int=0, right: Int = a.size-1 )  {
+    if (left >= right) return
+    val m = (right + left) ushr 1
+    mergeSort( a, left, m)
+    mergeSort(a,m + 1, right)
+    merge(a, left, m, right)
 
+}
 /**
  * Produz um array ordenado a partir de dois subarrays consecutivos ordenados
  * @param a array
@@ -121,5 +125,17 @@ fun mergeSort(a:Array<Int>, left: Int=0, right: Int = a.size-1 ) {
  * @param right - indice onde termina o segundo subarray ordenado (inclusivo)
  */
 fun merge(a: Array<Int>, left: Int, m: Int, right: Int) {
-   TODO()
+    val al= a.copyOfRange(left, m+1)
+    val ar = a
+    var i =0
+    var j= m+1
+    for( k in left.. right) {
+        if ( i >= al.size ) {
+           break; // a[k] = ar[j++]
+        }
+        else if (j > right || al[i] <= ar[j])
+            a[k] = al[i++]
+        else
+            a[k] = ar[j++]
+    }
 }

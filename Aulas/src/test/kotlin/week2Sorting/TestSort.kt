@@ -7,7 +7,7 @@ import kotlin.test.*
     val N = 1000
 
     fun sortArray( a: Array<Int>, l: Int, r: Int ) {
-        insertionSort(a, l, r)
+        mergeSort(a, l, r)
     }
 
     fun testSorted( a: Array<Int>) {

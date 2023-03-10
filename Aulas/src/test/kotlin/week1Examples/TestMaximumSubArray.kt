@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class TestMaximumSubArray {
-    val maxSubArray:(Array<Double>, Int, Int)-> Triple<Int, Int, Double> = ::maximumSubArrayQuad
+    val maxSubArray:(Array<Double>, Int, Int)-> Triple<Int, Int, Double> = ::maximumSubArray
     @Test
     fun testAllNegatives() {
         val a: Array<Double> = arrayOf(-2.0, -5.0, -1.0)

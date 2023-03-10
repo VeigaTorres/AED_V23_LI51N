@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class TestFibonnaci {
 
-    val fibonacci:(Int)-> Int = ::fibonacci
+    val fibonacci:(Int)-> Int = ::fibonacci_final
     @Test
     fun testFirsts(){
         assertEquals(0, fibonacci(0))

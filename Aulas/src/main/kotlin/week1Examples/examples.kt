@@ -35,7 +35,14 @@ fun fibonacci( n:Int ): Int {
 *   em termos de espaço extra - O(1)
 */
 fun fibonacci_final( n:Int ): Int {
-    return 0
+    if ( n <= 1 )  return n
+    val array = arrayOf(0, 1)
+    for( i in 2 .. n ) {
+        val aux = array[0] + array[1]
+        array[0] = array[1]
+        array[1] = aux;
+    }
+    return array[1]
 }
 
 
@@ -118,8 +125,19 @@ fun maximumSubArrayQuad( array: Array<Double>, left: Int, right:Int ):Triple<Int
  * em termos de espaço extra - O(1)
  */
 fun maximumSubArray( array:Array<Double>, left: Int, right:Int ):Triple<Int,Int,Double> {
-    if ( left > right ) return Triple(left, right, 0.0)
+    if ( left > right )
+        return Triple(left, right, 0.0)
     var res: Triple<Int, Int, Double> = Triple(left, left, array[left])
+    var sum = 0.0
+    var l = left
+    for (r in left..right) {
+            sum+= array[ r ]
+            if( sum > res.third) res = Triple(l, r, sum)
+            if ( sum < 0 ) {
+                sum = 0.0
+                l = r + 1
+            }
+    }
 
     return res
 }

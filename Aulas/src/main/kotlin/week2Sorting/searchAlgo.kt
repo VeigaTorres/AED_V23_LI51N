@@ -44,7 +44,13 @@ fun searchRecursive(array: Array<Int>, value: Int,
 fun searchBinaryRecursive(sortedArray: Array<Int>, value: Int,
                           left: Int=0, right: Int=sortedArray.size-1): Boolean {
     /* Pesquisa binária recursiva */
-    TODO()
+    if ( left > right) return false;
+    val m = (left+right) ushr 1
+    if ( sortedArray[m] == value) return true
+    if( sortedArray[m] > value)
+        return searchBinaryRecursive(sortedArray, value, left, m-1)
+    else
+        return searchBinaryRecursive(sortedArray, value, m+1, right)
 }
 
 fun searchBinary(sortedArray: Array<Int>, value: Int,
