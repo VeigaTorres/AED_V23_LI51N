@@ -6,9 +6,8 @@ import kotlin.test.*
  class TestSort  {
     val N = 1000
 
-    fun sortArray( a: Array<Int>, l: Int, r: Int ) {
+    fun sortArray( a: Array<Int>, l: Int, r: Int ) =
         mergeSort(a, l, r)
-    }
 
     fun testSorted( a: Array<Int>) {
         val expect = a.sortedArray()

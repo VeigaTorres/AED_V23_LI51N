@@ -8,7 +8,7 @@ fun <T> Array<T>.exchange(i1: Int, i2: Int) {
 /**
  * Ordena um subarray pelo algoritmo insertion sort. Algoritmo estável
  * Melodogia - por cada iteração INSERIR ordenadamente cada valor
- * Compexidade - O(n2), no melhor caso O(n)
+ * Compexidade - O(n^2) no pior caso, no melhor caso O(n)
  * @param a - array
  * @param left - indice onde começa o subarray (inclusivo)
  * @param right - indice onde termina o subarray (inclusivo)
@@ -74,20 +74,31 @@ fun bubbleSort(a:Array<Int>, left: Int=0, right: Int=a.size-1) {//Theta(n^2)
 /**
  * Ordena um subarray pelo algoritmo bubble sort. Algoritmo ESTÀVEL.
  * Quando deteta que já está ordenada termina a ordenação.
- * Compexidade -
+ * Compexidade - O(n^2) no pior caso O(n) no melhor caso
  * @param a - array
  * @param left - indice onde começa o subarray (inclusivo)
  * @param right - indice onde termina o subarray (inclusivo)
  */
 fun bubbleSortFlag(a:Array<Int>, left: Int=0, right: Int=a.size-1) {
     // Trabalho de casa
-    TODO()
+    var isSorted: Boolean = false;
+    var i = left
+    while ( !isSorted ) {
+        isSorted = true;
+        for (j in right downTo i + 1) {
+            if (a[j] < a[j - 1]) {
+                a.exchange(j, j - 1)
+                isSorted = false
+            }
+        }
+        ++i;
+    }
 }
 
 /**
  * Ordena um subarray pelo algoritmo selection sort. NÂO é ESTÁVEL
  * Metodogia - por cada iteração SELECIONAR o menor
- * complexidade -
+ * complexidade - O(n^2)
  * @param a - array
  * @param left - indice onde começa o subarray (inclusivo)
  * @param right - indice onde termina o subarray (inclusivo)
@@ -115,7 +126,6 @@ fun mergeSort(a:Array<Int>, left: Int=0, right: Int = a.size-1 )  {
     mergeSort( a, left, m)
     mergeSort(a,m + 1, right)
     merge(a, left, m, right)
-
 }
 /**
  * Produz um array ordenado a partir de dois subarrays consecutivos ordenados

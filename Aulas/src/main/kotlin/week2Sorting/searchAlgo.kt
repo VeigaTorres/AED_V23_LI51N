@@ -13,8 +13,23 @@ package week2Sorting
 fun search(array: Array<Int>, value: Int,
            left: Int=0, right: Int=array.size-1): Boolean {
     for ( i in left .. right )
-        if ( array[i] == value ) return true;
+        if ( array[i] == value )
+            return true;
     return false
+}
+
+/**
+ * Procurar um valor igual num array - algoritmo recursivo
+ * - Caso o valor nao seja o primeiro à esquerda procurar no restante subarray 'a direira
+ * Profundidade de recursão O(n)
+ * Custo máximo O( n )
+ * Custo minimo Omega( 1 )
+ */
+fun searchTailRecursive(array: Array<Int>, value: Int,
+                    left: Int=0, right: Int = array.size-1): Boolean {
+    if ( left > right ) return false
+    if ( array[ left] == value ) return true
+    return searchTailRecursive(array, value, left+1, right)
 }
 
 /**
@@ -56,7 +71,16 @@ fun searchBinaryRecursive(sortedArray: Array<Int>, value: Int,
 fun searchBinary(sortedArray: Array<Int>, value: Int,
                  left: Int=0, right: Int=sortedArray.size-1): Boolean {
     /* Pesquisa binária iterativa */
-    TODO()
+    var l = left; var r=right;
+    while( l <= r ) {
+        val m= (l+r) ushr 1;
+        if ( value == sortedArray[m] ) return true
+        if ( value > sortedArray[m]  )
+            l = m+1
+        else
+            r = m-1
+    }
+    return false
 }
 
 /**
@@ -72,7 +96,16 @@ fun searchBinary(sortedArray: Array<Int>, value: Int,
  * @return indice do primeiro valor igual ou maior a value
  */
 fun lowerBound(sortedArray: Array<Int>,value: Int, left: Int=0, right: Int=sortedArray.size-1): Int {
-    TODO()
+    var l = left;
+    var r =right;
+    while( l <= r ) {
+        val m= (l+r) ushr 1;
+        if ( sortedArray[m] >= value)
+            r = m-1
+        else
+            l = m+1
+    }
+    return l
 }
 
 /**
