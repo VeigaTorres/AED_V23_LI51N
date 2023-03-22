@@ -25,7 +25,7 @@ fun search(array: Array<Int>, value: Int,
  * Custo máximo O( n )
  * Custo minimo Omega( 1 )
  */
-fun searchTailRecursive(array: Array<Int>, value: Int,
+tailrec fun searchTailRecursive(array: Array<Int>, value: Int,
                     left: Int=0, right: Int = array.size-1): Boolean {
     if ( left > right ) return false
     if ( array[ left] == value ) return true
@@ -42,7 +42,11 @@ fun searchTailRecursive(array: Array<Int>, value: Int,
  */
 fun searchRecursive(array: Array<Int>, value: Int,
                     left: Int=0, right: Int = array.size-1): Boolean {
-    TODO()
+   if ( left > right ) return false
+    val m = (left+right) ushr 1
+    if ( array[m] == value ) return true
+    return searchRecursive( array, value, m+1, right) ||
+            searchRecursive(array, value, left, m-1)
 }
 
 /**
@@ -56,7 +60,7 @@ fun searchRecursive(array: Array<Int>, value: Int,
  * @param value       valor a procurar no array
  * @return true se encontrar o valor false caso contrário
  */
-fun searchBinaryRecursive(sortedArray: Array<Int>, value: Int,
+tailrec fun searchBinaryRecursive(sortedArray: Array<Int>, value: Int,
                           left: Int=0, right: Int=sortedArray.size-1): Boolean {
     /* Pesquisa binária recursiva */
     if ( left > right) return false;

@@ -90,9 +90,9 @@ fun powerRecursiveDepthLgN(base: Int, n: Int ):Int{
  *   em termos de tempo - O(lg n)
  *   em termos de espaço extra - O(lg n)
  */
-fun power(base: Int, n: Int ):Int{
+tailrec fun power(base: Int, n: Int ):Int{
     if( n == 0 ) return 1
-    val aux =power(base, n/2)
+    val aux = power(base, n/2)
     if ( n % 2 == 0 ) return  aux* aux
     else return aux* aux * base
 }
