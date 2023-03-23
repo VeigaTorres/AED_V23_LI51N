@@ -36,8 +36,16 @@ fun right(i: Int): Int = (i shl 1) + 2
  * @param i - indice do nó raiz do heap
  * @param compare - função de comparação
  */
-fun maxHeapify(heap: Array<Int>, heapSize: Int, i: Int) {
-
+tailrec fun maxHeapify(heap: Array<Int>, heapSize: Int, i: Int) {
+    val l= left(i)
+    val r= right(i)
+    var largest: Int
+    largest = if ( l < heapSize && heap[l] > heap[i]) l else i
+    if ( r < heapSize && heap[r] > heap[largest]) largest= r
+    if ( i != largest) {
+        heap.exchange( i, largest)
+        maxHeapify(heap, heapSize, largest)
+    }
 } // T(N) = T(n/2) +  O ( 1 ) = O( lg n)
 
 /**
@@ -90,7 +98,14 @@ fun <T> heapSort(a: Array<T>, compare:(T, T)->Int) {
  * @param value valor a inserir
  */
 fun <T> heapIncreaseKey(heap: Array<T>, index: Int, value: T, compare: (T, T) -> Int) {
-    TODO()
+    heap[index] = value
+    var i = index
+    var p= parent( i )
+    while ( i > 0 && compare(heap[i], heap[p]) > 0) {
+        heap.exchange(i, p)
+        i = p
+        p= parent(i)
+    }
 }
 
 /**
