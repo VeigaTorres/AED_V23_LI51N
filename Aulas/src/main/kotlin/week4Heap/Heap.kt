@@ -36,15 +36,16 @@ fun right(i: Int): Int = (i shl 1) + 2
  * @param i - indice do nó raiz do heap
  * @param compare - função de comparação
  */
-tailrec fun maxHeapify(heap: Array<Int>, heapSize: Int, i: Int) {
+tailrec fun <T>  maxHeapify(heap: Array<T>, heapSize: Int, i: Int,
+                                compare: (T, T)-> Int) {
     val l= left(i)
     val r= right(i)
     var largest: Int
-    largest = if ( l < heapSize && heap[l] > heap[i]) l else i
-    if ( r < heapSize && heap[r] > heap[largest]) largest= r
+    largest = if ( l < heapSize && compare(heap[l], heap[i]) > 0) l else i
+    if ( r < heapSize && compare(heap[r],  heap[largest]) > 0) largest= r
     if ( i != largest) {
         heap.exchange( i, largest)
-        maxHeapify(heap, heapSize, largest)
+        maxHeapify(heap, heapSize, largest, compare)
     }
 } // T(N) = T(n/2) +  O ( 1 ) = O( lg n)
 
@@ -59,7 +60,10 @@ tailrec fun maxHeapify(heap: Array<Int>, heapSize: Int, i: Int) {
  */
 fun <T> minHeapify(heap: Array<T>, heapSize: Int, i: Int,
                    compare: (T, T)-> Int) {
-    TODO()
+
+    maxHeapify(heap, heapSize,i ){
+            a, b -> compare( b, a)
+    }
 }
 
 /**
@@ -70,7 +74,8 @@ fun <T> minHeapify(heap: Array<T>, heapSize: Int, i: Int,
  */
 fun <T> buildMaxHeap(a: Array<T>, n: Int=a.size,
                      compare:(T, T)->Int) {
-    TODO()
+    for ( i in parent( n-1)  downTo  0)
+        maxHeapify(a, n , i, compare)
 }
 
 /**
@@ -78,7 +83,7 @@ fun <T> buildMaxHeap(a: Array<T>, n: Int=a.size,
  * @param a array valores a organizar em heap
  */
 fun <T> buildMinHeap(a: Array<T>, n: Int=a.size, compare:(T, T)->Int) {
-    TODO()
+    buildMaxHeap(a, n) { a, b -> compare(b, a)}
 }
 
 /**
@@ -87,7 +92,12 @@ fun <T> buildMinHeap(a: Array<T>, n: Int=a.size, compare:(T, T)->Int) {
  * @param a array com os valores a ordenar
  */
 fun <T> heapSort(a: Array<T>, compare:(T, T)->Int) {
-    TODO()
+    buildMaxHeap(a, a.size, compare) // Na aula não chamamos o build
+    for ( i in a.size-1 downTo  1){
+        a.exchange(i, 0)
+        maxHeapify(a, i, 0, compare)
+    }
+
 }   // T(N) = O(n) +  n x O( lg n ) = O(n) + O( n lg n) =  O(n + n lg n) = O(n lg n)
 
 /**
@@ -115,5 +125,8 @@ fun <T> heapIncreaseKey(heap: Array<T>, index: Int, value: T, compare: (T, T) ->
  * @return o valor retirado
  */
 fun <T> extractMaxHeap(heap: Array<T>, heapSize: Int, compare: (T, T) -> Int): T {
-    TODO()
+    val max = heap[0]
+    heap[0] = heap[heapSize-1]
+    maxHeapify(heap, heapSize-1, 0, compare)
+    return max
 }

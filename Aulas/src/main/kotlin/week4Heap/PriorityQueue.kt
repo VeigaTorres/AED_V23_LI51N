@@ -7,19 +7,22 @@ class PriorityQueue<T> (capacity:Int, val comparator:(T, T)-> Int)  {
     private val heap:Array<T> = arrayOfNulls<Any>(capacity) as Array<T>
     private var heapSize= 0
 
-    fun size():Int  = TODO()
+    fun size():Int  = heapSize
     
-    fun isEmpty(): Boolean = TODO()
+    fun isEmpty(): Boolean = size() == 0
 
-    fun peek(): T {
+    fun peek(): T { // Complexidade O(1)
         check( !isEmpty() ){"illegal operation (peek): empty heap"}
-        TODO()
+        return heap[0]
     }
-    fun poll( ): T {
+    fun poll( ): T { // Complexidade O(lg n)
         check( !isEmpty() ){"illegal operation (poll): empty heap"}
-        TODO()
+        return extractMaxHeap(heap, heapSize--, comparator)
     }
-    fun offer( v: T):Boolean {
-        TODO()
+    fun offer( v: T):Boolean { // Complexidade O (lg n)
+        if ( heapSize >= heap.size) return false
+        heapIncreaseKey(heap, heapSize, v,  comparator)
+        ++heapSize
+        return true
     }
 }
