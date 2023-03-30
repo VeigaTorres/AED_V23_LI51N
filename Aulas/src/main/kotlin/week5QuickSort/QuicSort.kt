@@ -1,13 +1,19 @@
 package week5QuickSort
 
 import week2Sorting.*
+import week4Heap.buildMaxHeap
 
+fun <T> partition( a: Array<T>, l: Int=0, r: Int=a.size-1, compare:(T,T)->Int ) =
+    partitionLomuto(a, l, r, compare)
 /**
  * 1ª Versão recursiva do algoritmo quickSort
  * Profundidade de recursão: O(n) Omega(lg n)
  */
 fun <T> quickSort0(a: Array<T>, l: Int=0, r: Int=a.size-1, compare:(T,T)->Int) {
-    TODO()
+    if ( r <= l ) return
+    val q = partition(a, l, r, compare)
+    quickSort0( a, l, q-1, compare)
+    quickSort0(a, q+1, r, compare)
 }
 
 /**
@@ -37,7 +43,16 @@ fun <T> partitionLomuto(a: Array<T>, l: Int, r: Int,
     // 	  a[l .. i] <= pivot
     //    a[i+1 .. j] > pivot
     //    a[j .. r-1] em análise
-    TODO()
+    var i = l-1
+    val pivot = a[r]
+    for( j in l until  r) {
+        if (compare(a[j], pivot) <= 0) {
+            ++i
+            a.exchange(i, j)
+        }
+    }
+    a.exchange(i+1, r)
+    return i+1
 }
 
 /**
@@ -45,7 +60,13 @@ fun <T> partitionLomuto(a: Array<T>, l: Int, r: Int,
  * profundidade máxima da recursão: O(n)
  */
 fun <T>quickSort1(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T) -> Int) {
-  TODO()
+    var l = left
+    val r = right
+    while ( l < r) {
+        val q = partition(a, l, r, compare)
+        quickSort1(a, l, q - 1, compare)
+        l = q+1
+     }
 }
 
 /**
@@ -53,7 +74,13 @@ fun <T>quickSort1(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T)
  * profundidade máxima da recursão: O(n)
  */
 fun <T>quickSort2(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T) -> Int) {
-    TODO()
+    val l = left
+    var r = right
+    while ( l < r) {
+        val q = partition(a, l, r, compare)
+        quickSort2(a, q+1, r, compare)
+        r = q-1
+    }
 }
 
 /**
@@ -61,8 +88,22 @@ fun <T>quickSort2(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T)
  * profundidade máxima da recursão: O(lg n)
  */
 fun <T> quickSort(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T) -> Int) {
- TODO()
-}
+    var l = left
+    var r = right
+    while ( l < r ) {
+        val q = partition(a, l, r, compare)
+        // Verificar os tamanhos dos dois sub arrays e
+        // chamar recursivamente o menor
+        if ( q-l > r-q) {
+            quickSort(a,  q+1, r, compare)
+            r = q-1
+        }
+        else {
+            quickSort(a, l, q-1, compare)
+            l = q+1
+        }
+    }
+ }
 
 /**
  * QuickSort - versão iterativa
@@ -71,8 +112,26 @@ fun <T> quickSort(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T)
 private fun <T> ArrayList<T>.push(t: T) = add(t)
 private fun <T> ArrayList<T>.pop():T=  removeLast()
 
-fun <T>quickSortIterative(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T) -> Int) {
-    TODO()
+fun <T> quickSortIterative(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T, T) -> Int) {
+    val stack = ArrayList<Int>()
+    stack.push(left); stack.push( right )
+    while ( !stack.isEmpty()) {
+        // No topo está sempre o menor
+        val r = stack.pop(); val l = stack.pop()
+        if ( l < r ) {
+            val q = partitionLomuto(a, l, r, compare)
+            // Verificar os tamanhos dos dois sub arrays e
+            // ordenar primeiro o menor
+            if ( q-l > r-q) { // Resolver primeiro os arrays menores
+                stack.push(l); stack.push(q - 1) //colocar no stack o maior
+                stack.push(q+1); stack.push( r) //colocar no stack o menor
+            }
+            else {
+                stack.push(q + 1); stack.push(r) //colocar no stack o maior
+                stack.push(l); stack.push(q - 1) //colocar no stack o menor
+            }
+        }
+    }
 }
 
 /**
@@ -232,7 +291,7 @@ fun <T> threePartition(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (
  * @param left indice a partir do qual é feita a partição (inclusivo)
  * @param right indice até onde é feita a partição (inclusivo)
  */
-fun <T>quickSortHybrid(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T,T)-> Int) {
+fun <T> quickSortHybrid(a: Array<T>, left: Int=0, right: Int=a.size-1, compare: (T,T)-> Int) {
     var l = left
     var r = right
     while (l < r) {
