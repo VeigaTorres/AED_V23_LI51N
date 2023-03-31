@@ -147,10 +147,23 @@ fun <T> quickSortWithMedian(a: Array<T>, left: Int=0, right: Int=a.size-1,
     var r = right
     while (l < r) {
         // Calcular a mediana de 3 valores: a[l], a[r], a[middle]
-
-        // O maior foi colocado em a[r] o menor em a[l] e o do meio em a[r-1]
-
+        val m = (r+l) ushr 1
+        a.exchange(m, r-1)
+        if ( compare(a[l], a[r-1]) > 0) a.exchange(l, r-1)
+        if( compare(a[l], a[r]) > 0) a.exchange(l, r)
+        if ( compare(a[r-1], a[r]) > 0 ) a.exchange(r-1, r )
+         // O maior foi colocado em a[r] o menor em a[l] e o do meio em a[r-1]
+        if ( r-l <= 2) return
+        val q = partition(a, l+1, r-1, compare)
         // A parte menor é ordenada recursivamente.
+        if (q-l > r-q) {
+            quickSortWithMedian(a, q + 1, r, compare)
+            r = q - 1
+        }
+        else {
+            quickSortWithMedian(a, l, q-1, compare)
+            l= q+1
+        }
 
      }
 }
@@ -180,7 +193,20 @@ fun <T> partitionHoare(a: Array<T>, l: Int=0, r: Int=a.size-1, compare: (T, T)->
     // 	  a[l .. i-1]   < pivot
     //    a[j+1 .. r-1] >= pivot
     //    a[i .. j]     em análise
-    TODO()
+    var i= l
+    var j = r-1
+    val pivot = a[r]
+    while ( i <= j) {
+        while (compare(a[i], pivot) < 0) ++i
+        while (j >= i && compare(a[j], pivot) > 0 ) --j
+        if (j >= i ) {
+            a.exchange(i, j)
+            ++i
+            --j
+        }
+    }
+    a.exchange( i, r)
+    return i
 }
 
 /**

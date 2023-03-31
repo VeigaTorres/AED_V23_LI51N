@@ -9,7 +9,7 @@ import kotlin.test.*
 
     fun sortArray( a: Array<Int>, l: Int, r: Int ) =
         //heapSort(a, Int::compareTo)
-        week5QuickSort.quickSortIterative(a,0, a.size-1, Int::compareTo)
+        week5QuickSort.quickSortHybrid(a,0, a.size-1, Int::compareTo)
 
     fun testSorted( a: Array<Int>) {
         val expect = a.sortedArray()
