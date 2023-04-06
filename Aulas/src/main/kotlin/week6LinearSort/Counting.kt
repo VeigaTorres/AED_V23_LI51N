@@ -12,7 +12,19 @@ import kotlin.math.pow
  * @param k cada um dos elementos do array a é um inteiro entre 0..k
  */
 private fun countingSort(a: Array<Int>, b: Array<Int>, n:Int, k: Int) {
-    TODO()
+    val c = Array(k+1){ 0 }
+    for( i in 0 until n ) {
+        //val indexedVal = a[i]
+        ++c[ a[ i ]]
+    }
+    for( i in 1 until c.size)
+        c[i] += c[i-1]
+
+    for( i in n-1 downTo  0) {
+        --c[ a[i] ]
+        val positionFinal = c[ a [i] ]
+        b[ positionFinal ] = a[i]
+    }
 }
 /**
  * Algoritmo de ordenação em tempo linear.
@@ -45,7 +57,20 @@ private fun countingRadixSort( a: Array<Int>, b: Array<Int>,
     // Numero de shifts sabendo que cada digíto ocupa rBits
     val shift = digitNumber * rBits
     val c = Array(mask + 1) {0};
-    TODO()
+    //for ( i in 0 until a.size-1) {//Na aula estava errado com o until deve ser a.size()
+    for ( i in 0 until a.size) {
+        val index = a[i] shr shift and mask
+        ++c[ index ]
+    }
+    for( i in 1 until c.size)
+        c[i] += c[i-1]
+
+    for ( i in a.size-1 downTo  0) {
+        val index = a[i] shr shift and mask
+        -- c[ index]
+        b[ c[index ]] = a[i]
+    }
+
 }
 
 /**

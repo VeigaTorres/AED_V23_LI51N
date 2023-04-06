@@ -17,6 +17,7 @@ import kotlin.test.*
         //mergeSort(a, l, r)
         //heapSort(a, Int::compareTo)
         //quickSortHybrid(a,0, a.size-1, Int::compareTo)
+        //countingSort(a)
         radixSort( a )
     fun testSorted( a: Array<Int> ) {
         val expect = a.sortedArray()
