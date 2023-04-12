@@ -58,7 +58,7 @@ class TestPriorityQueue {
         val pq = PriorityQueue<Int>(10, Int::compareTo)
         for ( v in values )
             pq.offer( v )
-        for( v in values.size .. 1)
+        for( v in values.size downTo  1)
             assertEquals(v, pq.poll())
     }
 
