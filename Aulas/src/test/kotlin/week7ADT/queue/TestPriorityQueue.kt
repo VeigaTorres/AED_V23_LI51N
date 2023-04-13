@@ -1,7 +1,6 @@
 package week7ADT.queue
 
 import kotlin.test.*
-
 class TestPriorityQueue {
     val N = 10
     @Test

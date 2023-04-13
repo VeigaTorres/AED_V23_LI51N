@@ -1,9 +1,24 @@
 package week7ADT.stack
 
-/**
- * Created by msousa on 3/1/2019.
- */
-class ArrayStack<T>(val capacity: Int) {
-    private val array: Array<T> = arrayOfNulls<Any>(capacity) as Array<T>
+class ArrayStack<E>(val capacity: Int) : Stack<E> {
+    private val array: Array<E> = arrayOfNulls<Any>(capacity) as Array<E>
     private var top: Int = 0
+
+    override val size: Int get() = top
+    override fun isEmpty(): Boolean= top == 0
+    override fun push(e: E) {
+        check( top < capacity){ "underflow"}
+        array[top++]= e
+    }
+
+    override fun pop() : E {
+        check(!isEmpty()){"stack empty"}
+        return array[--top]
+    }
+
+    override fun peek(): E {
+        if( isEmpty() ) throw NoSuchElementException("stack empty")
+        return array[top -1]
+    }
+
 }

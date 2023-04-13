@@ -1,9 +1,9 @@
 package week7ADT.queue
 
-interface Queue<T> {
+interface Queue<E> {
     val size: Int
     fun isEmpty(): Boolean
-    fun peek(): T
-    fun offer(e: T): Boolean
-    fun poll() : T
+    fun peek(): E
+    fun offer(e: E): Boolean
+    fun poll() : E
 }

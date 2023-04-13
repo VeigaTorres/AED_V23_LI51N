@@ -7,7 +7,8 @@ class TestStack {
     val N = 10
 
     fun getStack(n: Int): Stack<Int> {
-        TODO()
+        return LinkedStack<Int>(  )
+        //return ArrayStack<Int>(n)
     }
     @Test
     fun testEmpty() {
