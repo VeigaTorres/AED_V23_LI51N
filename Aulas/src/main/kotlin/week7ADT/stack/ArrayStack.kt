@@ -21,4 +21,16 @@ class ArrayStack<E>(val capacity: Int) : Stack<E> {
         return array[top -1]
     }
 
+    private inner class Iter : Iterator<E> {
+        var index =0
+        override fun hasNext(): Boolean = index < size
+
+        override fun next(): E {
+            if( !hasNext() ) throw NoSuchElementException( "no more elements")
+            return array[index++]
+        }
+    }
+
+    override fun iterator(): Iterator<E> = Iter()
+
 }

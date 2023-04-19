@@ -35,4 +35,19 @@ class LinkedStack<E>() : Stack<E>{
         // head = Node(e, head)
     }
 
+    private inner class Iter : Iterator<E> {
+        var curr: Node<E>? = head
+        override fun hasNext()= head != null
+
+        override fun next(): E {
+            val n : Node<E> = (curr?: throw NoSuchElementException())
+            curr = n.next
+            return n.key
+
+        }
+
+    }
+    override fun iterator(): Iterator<E> = Iter()
+
+
 }
