@@ -5,7 +5,7 @@ import week4Heap.heapIncreaseKey
 import week4Heap.maxHeapify
 import kotlin.Comparator
 
-class PriorityQueue<E> (val capacity: Int, val comparator: Comparator<E>) : Queue<E>, Iterable<E>{
+class PriorityQueue<E> (val capacity: Int, val comparator: Comparator<E>) : Queue<E>{
     private val compare: (E,E)->Int = { a, b-> comparator.compare(b, a)}
     private val heap: Array<E> = arrayOfNulls<Any>(capacity) as Array<E>
     private var sizeHeap: Int = 0
@@ -29,15 +29,34 @@ class PriorityQueue<E> (val capacity: Int, val comparator: Comparator<E>) : Queu
     }
 
     operator fun contains(v: E): Boolean { // O (n)
-        TODO()
+        for( value in  this )
+            if ( value == v ) return true
+        return false
     }
 
     fun remove(v: E): Boolean { // O (n) + O(lg n) = O(n)
-         TODO()
+         for ( i in 0 until size )
+             if ( heap[ i ] == v ) {
+                 replace( i, heap[--sizeHeap])
+/*
+                 heap[i] = heap[--sizeHeap]
+                 if ( compare(heap[i], v )< 0 )
+                    maxHeapify(heap, sizeHeap, i, compare)
+                 else
+                     heapIncreaseKey(heap, i, heap[i], compare)
+*/
+                 return true
+             }
+        return false
     }
 
     fun replace(i: Int, v: E) {  // O(lg n)
-        TODO()
+        val old= heap[i]
+        heap[i] = v
+        if (compare(v, old) >0)
+            heapIncreaseKey(heap, i, v, compare  )
+        else
+            maxHeapify(heap, sizeHeap, i, compare)
     }
 
     override fun iterator(): Iterator<E> {
@@ -50,4 +69,10 @@ class PriorityQueue<E> (val capacity: Int, val comparator: Comparator<E>) : Queu
             }
         }
     }
+
+    override fun toString(): String{
+        return this.joinToString(",", "[", "]")
+
+    }
+
 }

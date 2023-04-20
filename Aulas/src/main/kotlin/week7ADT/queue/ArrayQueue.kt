@@ -25,12 +25,29 @@ class ArrayQueue<E>(val capacity: Int) : Queue<E>{
         return e
     }
 
+    override fun iterator(): Iterator<E> =
+        object : Iterator<E> {
+            var index= 0
+            override fun hasNext(): Boolean = index < count
+
+            override fun next(): E {
+                val v = array[(index+head)% capacity]
+                ++index
+                return v
+            }
+        }
+
     override fun offer(e: E): Boolean {
         if ( count == capacity ) return false
         array[tail]= e
         tail = (tail+1) % array.size
         ++count
         return true
+    }
+
+    override fun toString(): String{
+        return this.joinToString(",", "[", "]")
+
     }
 
 }

@@ -35,19 +35,22 @@ class LinkedStack<E>() : Stack<E>{
         // head = Node(e, head)
     }
 
-    private inner class Iter : Iterator<E> {
-        var curr: Node<E>? = head
-        override fun hasNext()= head != null
+    override fun iterator(): Iterator<E> =
+        object : Iterator<E>  {
+            var curr: Node<E>? = head
+            override fun hasNext()= curr != null
 
-        override fun next(): E {
-            val n : Node<E> = (curr?: throw NoSuchElementException())
-            curr = n.next
-            return n.key
+            override fun next(): E {
+                val n = (curr?: throw NoSuchElementException())
+                curr = n.next
+                return n.key
 
+            }
         }
 
-    }
-    override fun iterator(): Iterator<E> = Iter()
+    override fun toString(): String{
+        return this.joinToString(",", "[", "]")
 
+    }
 
 }

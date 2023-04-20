@@ -1,6 +1,6 @@
 package week7ADT.queue
 
-interface Queue<E> {
+interface Queue<E> : Iterable<E>{
     val size: Int
     fun isEmpty(): Boolean
     fun peek(): E

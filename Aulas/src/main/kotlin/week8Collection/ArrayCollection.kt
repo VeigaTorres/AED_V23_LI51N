@@ -37,10 +37,13 @@ public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess {//M
     }
 
     fun remove(e: E): Boolean{
+        /*
         val index = indexOf(e)
         if (index == -1) return false
         removeAt(index);
+         */
         return true
+
     }
 
     fun indexOf( e: E): Int {

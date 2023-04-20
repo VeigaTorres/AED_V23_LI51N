@@ -21,6 +21,26 @@ class LinkedQueue<E> : Queue<E> {
         return first.key
     }
 
+    override fun iterator(): Iterator<E> =
+        object : Iterator<E> {
+            var curr = head
+            override fun hasNext(): Boolean = curr != null
+
+            override fun next(): E {
+/*                val v =
+                curr= v.next
+                return v.key
+                return (curr?: throw NoSuchElementException()).let {
+                    curr= it.next
+                    it
+                }.key*/
+                return (curr?: throw NoSuchElementException()).also {
+                    curr= it.next
+                }.key
+            }
+
+
+        }
     override fun offer(e: E): Boolean {
         val n = Node(e, null)
         val last = tail
@@ -29,6 +49,11 @@ class LinkedQueue<E> : Queue<E> {
         tail = n
         ++count
         return true;
+    }
+
+    override fun toString(): String{
+        return this.joinToString(",", "[", "]")
+
     }
 
 }

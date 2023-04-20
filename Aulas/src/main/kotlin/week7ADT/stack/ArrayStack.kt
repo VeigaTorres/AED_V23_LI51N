@@ -22,15 +22,19 @@ class ArrayStack<E>(val capacity: Int) : Stack<E> {
     }
 
     private inner class Iter : Iterator<E> {
-        var index =0
-        override fun hasNext(): Boolean = index < size
+        var index = size // Para que seja iterado pela ordem do pop
+        override fun hasNext(): Boolean = index > 0
 
         override fun next(): E {
             if( !hasNext() ) throw NoSuchElementException( "no more elements")
-            return array[index++]
+            return array[--index]
         }
     }
 
     override fun iterator(): Iterator<E> = Iter()
 
+    override fun toString(): String{
+        return this.joinToString(",", "[", "]")
+
+    }
 }

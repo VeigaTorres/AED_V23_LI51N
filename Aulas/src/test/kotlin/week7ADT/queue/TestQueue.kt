@@ -6,7 +6,7 @@ class TestQueue {
     val N = 10
     fun getQueue(n: Int): Queue<Int> {
         return LinkedQueue<Int>()
-        //return ArrayQueue<Int>(n)
+        return ArrayQueue<Int>(n)
     }
 
     @Test
