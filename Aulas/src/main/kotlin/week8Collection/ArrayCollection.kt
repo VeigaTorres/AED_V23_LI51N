@@ -1,6 +1,6 @@
 package week8Collection
 
-public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess {//MutableCollection<E>,{
+public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess {//, MutableCollection<E>{
 //<< Variáveis de instância >>
     private var count = 0       // Número de elementos contidos.
     //private var capacity: Int = capacityInicial  // Dimensão do array.
@@ -37,11 +37,9 @@ public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess {//M
     }
 
     fun remove(e: E): Boolean{
-        /*
         val index = indexOf(e)
         if (index == -1) return false
         removeAt(index);
-         */
         return true
 
     }
