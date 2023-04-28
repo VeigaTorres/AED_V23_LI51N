@@ -15,8 +15,9 @@ public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess, Mut
 
     operator fun set(index: Int, element: E): E {
         require( index < size)
+        val old = array[index]
         array[ index] = element
-        return array[ index]
+        return old
     }
     override fun isEmpty() = size == 0
     @Suppress("UNCHECKED_CAST")
