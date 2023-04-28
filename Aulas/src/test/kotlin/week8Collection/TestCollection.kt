@@ -3,16 +3,14 @@ package week8Collection
 import kotlin.test.*
 
 class TestCollection {
-    private fun emptyCollection():MutableCollection<Int> = TODO() //ArrayCollection<Int>()
+    private fun emptyCollection():MutableCollection<Int> = ArrayCollection<Int>()
+    //private fun emptyCollection():MutableCollection<Int> = LinkedCollection<Int>()
     private fun emptyIterator() = emptyCollection().iterator()
     private fun addSequenceOf(start:Int, end: Int) :MutableCollection<Int>{
-        /*
         val c= emptyCollection()
         for (i in 0 until end-start )
-          c.add(i, start+i)
+          c.add(start+i)
         return c
-         */
-        TODO()
     }
     @Test
     fun test_emptyCollection() {
@@ -67,6 +65,18 @@ class TestCollection {
         assertEquals(a.size, expected)
     }
 
+    @Test
+    fun test_contains() {
+        val a = mutableListOf(1, 2, 3, 4, 5, 6)
+        val c: MutableCollection<Int> = emptyCollection()
+        c.addAll( a )
+        for (e in a)
+            assertTrue(c.contains(e))
+        assertTrue( c.containsAll(a))
+        assertFalse(c.contains(7))
+        a+=7
+        assertFalse( c.containsAll(a))
+    }
     @Test
     fun test_sequence_two_iteration() {
         var vE = -3
@@ -127,4 +137,18 @@ class TestCollection {
         }
     }
 
+    @Test
+    fun test_getAndSet() {
+        val col = emptyCollection()
+        if ( col is ArrayCollection) {
+                col.addAll( listOf(1, 2, 3, 4) )
+                assertEquals(1, col[0])
+                assertEquals(4, col[3])
+                col[0]= 0
+                for (i in 1 until col.size)
+                    col[i]-= 1
+                assertEquals(0, col[0])
+                assertEquals(3, col[3])
+        }
+    }
 }
