@@ -43,11 +43,11 @@ public class ArrayCollection<E>( capacityInicial: Int = 10 ):  RandomAccess, Mut
     }
 
     override fun addAll(elements: Collection<E>): Boolean {
-        elements.forEach { add( it )}
+        elements.forEach { add( it ) }
         return !elements.isEmpty()
     }
 
-    fun removeAt(index: Int) {
+    fun removeAt( index: Int ) {
         require(index < size)
         array.copyInto(array, index, index + 1, size)
         --count

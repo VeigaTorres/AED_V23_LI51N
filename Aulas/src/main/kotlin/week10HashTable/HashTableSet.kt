@@ -1,5 +1,7 @@
 package week10HashTable
 
+import java.lang.IllegalStateException
+
 
 class HashTableSet<K> (capacityInitial:Int=5,
                        val loadFactor: Float= 0.75f): MutableSet<K> {
@@ -18,35 +20,103 @@ class HashTableSet<K> (capacityInitial:Int=5,
     override fun isEmpty(): Boolean = size == 0
 
     private fun getNode(key: K, hc:Int, index: Int ): Node<K>? {
-        TODO()
+        var curr = table[index]
+        while( curr != null ) {
+            if ( hc == curr.hc && curr.key == key)
+                return curr
+            curr = curr.next
+        }
+        return null
     }
 
-    override fun contains(key: K): Boolean {
-        TODO()
-    }
-
-
-    override fun add(key: K) : Boolean {
-        val hc = key.hashCode()
+    override fun contains(element: K): Boolean {
+        val hc = element.hashCode()
         val index = hash( hc )
-        TODO()
+        return getNode(element, hc, index) != null
     }
 
-    override fun remove(key:K) : Boolean {
-        val hc = key.hashCode()
+
+    override fun add(element: K) : Boolean {
+        val hc = element.hashCode()
         val index = hash( hc )
-        TODO()
+        if ( getNode( element, hc, index) != null ) return false
+        val node = Node<K>( element, table[index], hc)
+        table[index] = node
+        ++count
+        if( count > threshold  ) expand()
+        return true
+    }
+
+    override fun remove(element:K) : Boolean { //O(1)
+        val hc = element.hashCode()
+        val index = hash( hc )
+        var prev: Node<K>? = null
+        var curr = table[index]
+        while ( curr != null ) {
+            if ( curr.hc == hc &&  curr.key == element ) {
+                if ( prev != null )
+                    prev.next = curr.next
+                else
+                    table[index]= curr.next
+                --count
+                return true
+            }
+            prev = curr
+            curr= curr.next
+
+        }
+        return false
     }
 
     private fun expand() {
-        TODO()
+       val oldTable = table
+       table = arrayOfNulls(capacity * 2 )
+       threshold = (capacity * loadFactor).toInt()
+       for( oldIndex in oldTable.indices) {
+           var node = oldTable[oldIndex]
+           while ( node != null ) {
+               oldTable[oldIndex] = node.next;
+               val newIndex = hash(node.hc)
+               node.next = table[newIndex]
+               table[newIndex] = node
+               node = oldTable[oldIndex]
+           }
+       }
     }
 
     override fun clear() {
-        TODO()
+        table.fill(null)
+        count=0
     }
 
-    override fun iterator() = TODO()
+    override fun iterator() =
+        object : MutableIterator<K> {
+            var index = -1
+            var curr = advance()
+            var prev: Node<K>? = null
+
+            fun advance(): Node<K>? {
+                while( ++index < capacity && table[index] == null ) {}
+                if ( index < capacity ) return table[index]
+                return null
+            }
+            override fun hasNext(): Boolean = curr != null
+
+            override fun next(): K {
+               val n = curr?: throw NoSuchElementException("no more elements")
+               curr = n.next
+               prev = n
+               if ( curr == null ) curr = advance()
+               return n.key
+            }
+
+            override fun remove() {
+                val n = prev?: throw IllegalStateException("not have next() before")
+                remove( n.key )
+                prev = null
+            }
+
+        }
 
     override fun containsAll(elements: Collection<K>): Boolean =
         elements.all{ contains(it) }
@@ -56,10 +126,13 @@ class HashTableSet<K> (capacityInitial:Int=5,
         elements.forEach{ add(it) }
         return count != oldSize
     }
-    override fun retainAll(elements: Collection<K>): Boolean
-       = removeIf(){!elements.contains(it)}
+    override fun retainAll(elements: Collection<K>): Boolean =
+        removeIf { !elements.contains(it) }
 
-    override fun removeAll(elements: Collection<K>): Boolean
-       = removeIf { elements.contains( it) }
+    override fun removeAll(elements: Collection<K>): Boolean {
+        var result = false
+        elements.forEach { if(remove(it)) result= true }
+        return result
+    }
 
 }

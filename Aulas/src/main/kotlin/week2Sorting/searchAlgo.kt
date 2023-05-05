@@ -46,7 +46,7 @@ fun searchRecursive(array: Array<Int>, value: Int,
     val m = (left+right) ushr 1
     if ( array[m] == value ) return true
     return searchRecursive( array, value, m+1, right) ||
-            searchRecursive(array, value, left, m-1)
+           searchRecursive(array, value, left, m-1)
 }
 
 /**

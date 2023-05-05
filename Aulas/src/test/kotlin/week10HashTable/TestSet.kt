@@ -5,8 +5,8 @@ import kotlin.test.*
 class TestSet {
     private fun getSet(): MutableSet<Int> {
         //return TreeSet(Comparator.naturalOrder())
-        //return HashTableSet()
-        return HashSet()
+        return HashTableSet()
+        //return HashSet()
     }
 
     private fun emptyTest(set: Set<Int>) {

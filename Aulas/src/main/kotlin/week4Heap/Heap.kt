@@ -97,7 +97,6 @@ fun <T> heapSort(a: Array<T>, compare:(T, T)->Int) {
         a.exchange(i, 0)
         maxHeapify(a, i, 0, compare)
     }
-
 }   // T(N) = O(n) +  n x O( lg n ) = O(n) + O( n lg n) =  O(n + n lg n) = O(n lg n)
 
 /**
