@@ -1,6 +1,5 @@
 package week11Trees
 
-import java.util.*
 import kotlin.Comparator
 import kotlin.NoSuchElementException
 import kotlin.math.max
@@ -59,7 +58,7 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
 
     /**
      * Obter o nó cuja chave é key
-     * @param r raiz da àrvore
+     * @param root raiz da àrvore
      * @param key valor a procurae
      * @param <K> tipo da chave
      * @return nó cuja chave é key
@@ -79,7 +78,6 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
 
     /**
      * Adiciona um nó com chave key caso já não exista um nó com igual chave
-     * @param r raiz da àrvore
      * @param key valor a procurae
      * @param <K> tipo da chave
      * @return a raiz da nova arvore
@@ -142,12 +140,12 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
 
     /**
      * Obter o nó cuja chave é o valor imediatamente maior
-     * @param root raiz da àrvore
+     * @param r raiz da àrvore
      * @param <K> tipo da chave
      * @return nó cuja chave é imediatsmente maior
      */
     private fun sucessor(r: TreeNode<K>): TreeNode<K>? {
-        var right = r.right
+        val right = r.right
         if (right!= null)
             return minimum(right)
         var parent  = r.parent
@@ -167,13 +165,14 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      */
     private fun removeNode( z: TreeNode<K> ) {
         var rem: TreeNode<K>
-        var r = z.right
+        val r = z.right
         if ( r != null && z.left != null ) {
             rem = minimum( r )
             z.key = rem.key
         }
-        else
+        else {
             rem = z
+        }
         val parent = rem.parent
         val child = if (rem.right != null) rem.right else rem.left
         if ( child != null )  child.parent = parent
@@ -201,7 +200,7 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
         root = null
         count = 0
     }
-    override fun addAll(elements: Collection<out K>): Boolean {
+    override fun addAll(elements: Collection<K>): Boolean {
         var b = false
         elements.forEach { if( add(it) ) b = true }
         return b
@@ -301,7 +300,11 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      * @return
     </E> */
     private fun treeToList(root: TreeNode<K>?, head: TreeNode<K>? = null): TreeNode<K>? {
-        TODO()
+        if ( root == null ) return head
+        var newHead = treeToList( root.right, head)
+        root.right = newHead
+        newHead = root
+        return treeToList(root.left, newHead)
     }
 
     /**
@@ -313,7 +316,16 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      * @return
      */
     private fun listToTree(sentinel: TreeNode<K>, size: Int ): TreeNode<K>? {
-         TODO()
+        if ( size == 0 ) return null
+        val n= size/2
+        val treeLeft= listToTree( sentinel, n )
+        val root = sentinel.right
+        root?.let{
+            it.left = treeLeft // Faltava na aula
+            sentinel.right = it.right
+            it.right = listToTree( sentinel, size-n -1)
+        }
+        return root
     }
 
     /**
@@ -354,11 +366,70 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      * @param <K> tipo da chave de pesquisa
      * @return  retorna a altura caso a árvore esteja balanceada ou -1 caso não esteja.
     </K> */
-    private fun isBal(root: TreeNode<K>?): Int = TODO()
+    private fun isComplete(root: TreeNode<K>?): Int? {
+        if ( root == null ) return 0
+        val hl = isComplete(root.left)
+        if ( hl != null ) {
+            val hr = isComplete(root.right)
+            if ( hl == hr) return hl + 1
+        }
+        return null
+    }
 
     /**
      * Verificar se a àrvore do TreeSet está balanceada.
      * @return  true se a árvore estiver balanceada, caso contrário false.
      */
-    fun isBalancing(): Boolean = isBal(root) >= 0
+    fun isCompelete(): Boolean = isComplete(root) != null
+
+    /**
+     * Dada a árvore binária pesquisa com raíz root, retorna a menor profundidade
+     * da árvore. A menor profundidade é o número de nós existente no caminho mais
+     * curto entre o nó raíz e um dos nós folha.
+     * @param root raiz da àrvore
+     * @return  a menor profundidade.
+     */
+    private fun findMinimumDepth(root:TreeNode<Int>):Int{
+        TODO()
+    }
+
+    /**
+     * Dada a árvore binária com raíz root, de valores inteiros positivos,
+     * retorna o maior inteiro presente na árvore que seja menor ou igual a
+     * determinado valor k ou null caso não exista.
+     * @param root raiz da àrvore
+     * @param k valor maior ou igual
+     * @return  maior inteiro presente na árvore que seja menor ou igual.
+     */
+    private fun higher( root:TreeNode<Int>?, k:Int ): Int? {
+        TODO()
+    }
+
+    /**
+     * Dada a árvore binária com raíz root, verifica se a árvore satisfaz
+     * a propriedade da soma dos nós filhos. Para uma árvore satisfazer a
+     * propriedade da soma dos nós filhos, o valor presente em cada nó
+     * (exceto os nós folha) deverá ser igual à soma dos valores presentes
+     * nos seus nós filhos (esquerdo e direito).
+     * @param root raiz da àrvore
+     * @return  true se a árvore satisfaz a propriedade da soma dos nós filhos.
+     */
+    private fun isChildrenSum(root:TreeNode<Int>?):Boolean {
+        TODO()
+    }
+
+    /**
+     * Dada a árvore binária pesquisa com raíz root, sem repetições, e
+     * dois inteiros a e b, em que a<b, verifica se eles ocorrem na árvore
+     * em nós irmãos. Dois nós são irmãos se ocorrem no mesmo nível e
+     * têm o mesmo nó pai.
+     * @param root raiz da àrvore
+     * @a valor inteiro
+     * @b valor inteiro
+     * @return  true se a e b eles ocorrem na árvore em nós irmãos.
+     */
+    private fun areSiblingsInBST(root:TreeNode<Int>?,a:Int, b:Int):Boolean {
+        TODO()
+    }
+
 }

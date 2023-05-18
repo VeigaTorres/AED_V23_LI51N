@@ -10,6 +10,7 @@
     <file url="file://$PROJECT_DIR$/src/main/kotlin/week7ADT/queue" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/kotlin/week7ADT/stack" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/test/kotlin/week10HashTable/TestSet.kt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/test/kotlin/week11Trees/TestTree.kt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/test/kotlin/week2Sorting/TestSearch.kt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/test/kotlin/week2Sorting/TestSort.kt" charset="windows-1252" />
   </component>
