@@ -1,14 +1,18 @@
 package week11Trees
 
+import java.util.LinkedList
+import java.util.Queue
 import kotlin.Comparator
 import kotlin.NoSuchElementException
 import kotlin.math.max
+import kotlin.math.min
 
 open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> {
-    private class TreeNode<K> (var key: K,
-                       var left: TreeNode<K>?=null,
-                       var right: TreeNode<K>?=null,
-                       var parent: TreeNode<K>?=null ){
+    private class TreeNode<K> (
+        var key: K,
+        var left: TreeNode<K>?=null,
+        var right: TreeNode<K>?=null,
+        var parent: TreeNode<K>?=null ) {
     }
 
     // << Variaveis de instância >>
@@ -277,17 +281,8 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      * @return a altura
      */
     fun height() = height( root )
-    /**
-     * Percorre a àrvore em largura.
-     * Usa como auxiliar uma queue (critério de ordenação FIFO), o método:
-     *  offer - adiciona
-     *  poll  - remove o adicionado à mais tempo
-     */
-    fun transverseBreadthFirst( action: (k:K) -> Unit ) {
-        TODO()
-    }
 
-    /**
+     /**
      * MÉTODOS de BALANCEAMENTO
      */
     /**
@@ -322,8 +317,10 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
         val root = sentinel.right
         root?.let{
             it.left = treeLeft // Faltava na aula
+            treeLeft?.parent = root
             sentinel.right = it.right
             it.right = listToTree( sentinel, size-n -1)
+            it.right?.parent = root
         }
         return root
     }
@@ -383,16 +380,70 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
     fun isCompelete(): Boolean = isComplete(root) != null
 
     /**
+     * Percorre a àrvore em largura.
+     * Usa como auxiliar uma queue (critério de ordenação FIFO), o método:
+     *  offer - adiciona
+     *  poll  - remove o adicionado à mais tempo
+     */
+    fun transverseBreadthFirst( action: (k:K) -> Unit ) {
+        root?.let {
+            val q: Queue< TreeNode<K> > = LinkedList<TreeNode<K>>() // Do java.util
+            q.offer( it )
+            while( !q.isEmpty()) {
+                val r= q.poll()
+                action( r.key )
+                if ( r.left != null ) q.offer( r.left )
+                r.right?.let{q.offer( it) }
+            }
+        }
+    }
+
+    /**
+     * Obter o enésimo elemento da arvore.
+     * @param n número do elemento a obter
+     * @return o enésima elemento.
+     */
+    private data class Result<K>( var n: Int, var node: TreeNode<K>?)
+    fun nesimo(n: Int) : K {
+       val result = Result<K>( n, null)
+        nesimo( root, result)
+        return (result.node ?: throw NoSuchElementException("")).key
+    }
+
+    private fun nesimo(root: TreeNode<K>?, result: Result<K>) {
+        if (root == null) return
+        nesimo( root.left, result)
+        --result.n
+        if ( result.n == 0 ) {
+            result.node =  root
+        }
+        if ( result.node == null ) nesimo(root.right, result)
+
+    }
+
+    /**
      * Dada a árvore binária pesquisa com raíz root, retorna a menor profundidade
      * da árvore. A menor profundidade é o número de nós existente no caminho mais
      * curto entre o nó raíz e um dos nós folha.
      * @param root raiz da àrvore
      * @return  a menor profundidade.
      */
-    private fun findMinimumDepth(root:TreeNode<Int>):Int{
-        TODO()
+    private fun findMinimumDepth(root:TreeNode<K>):Int{
+        val r = root.right
+        val l = root.left
+        if ( r== null && l == null ) return 0
+        val hr = if ( r!= null ) findMinimumDepth( r )
+                 else Int.MAX_VALUE
+        val hl = if( l != null) findMinimumDepth( l)
+                 else Int.MAX_VALUE
+        return min(hl, hr) + 1
     }
 
+    fun findMinimumDepth():Int {
+        (root ?: return -1).let {
+            return findMinimumDepth(it)
+        }
+    }
     /**
      * Dada a árvore binária com raíz root, de valores inteiros positivos,
      * retorna o maior inteiro presente na árvore que seja menor ou igual a
@@ -401,10 +452,25 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
      * @param k valor maior ou igual
      * @return  maior inteiro presente na árvore que seja menor ou igual.
      */
-    private fun higher( root:TreeNode<Int>?, k:Int ): Int? {
-        TODO()
+    private fun higher( root:TreeNode<K>?, k:K, cmp: (K,K)-> Int ): K? {
+        var r = root
+        var greater: K? = null
+        while ( r != null ) {
+            if ( cmp(k, r.key) <0) {
+                r = r.left
+            }
+            else if ( cmp(k, r.key)>0) {
+                greater = r.key
+                r= r.right
+            }
+            else return r.key
+        }
+        return greater
     }
-
+    fun higher( k:K, cmp: (K,K)-> Int ): K? =
+        (root?: throw NoSuchElementException("")).let {
+            higher( it, k, cmp)
+        }
     /**
      * Dada a árvore binária com raíz root, verifica se a árvore satisfaz
      * a propriedade da soma dos nós filhos. Para uma árvore satisfazer a
@@ -431,5 +497,4 @@ open class AedTreeSet<K>(private val comparator: Comparator<K>) : MutableSet<K> 
     private fun areSiblingsInBST(root:TreeNode<Int>?,a:Int, b:Int):Boolean {
         TODO()
     }
-
 }
